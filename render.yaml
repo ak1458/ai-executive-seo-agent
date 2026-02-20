@@ -1,0 +1,47 @@
+services:
+  - type: redis
+    name: ai-executive-redis
+    ipAllowList: [] # internal only
+
+  - type: web
+    name: ai-executive-backend
+    env: python
+    region: oregon
+    buildCommand: "cd seo_executive/backend && pip install -r requirements.txt && playwright install chromium"
+    startCommand: "cd seo_executive/backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: ai-executive-redis
+          property: connectionString
+      - key: DATABASE_URL
+        value: sqlite:///data/seo_executive.db
+      - key: OLLAMA_BASE_URL
+        value: http://localhost:11434  # NOTE: Local Ollama won't work on Render easily without exposing it via ngrok or running Ollama on a GPU server.
+
+  - type: worker
+    name: ai-executive-worker
+    env: python
+    region: oregon
+    buildCommand: "cd seo_executive/backend && pip install -r requirements.txt && playwright install chromium"
+    startCommand: "cd seo_executive/backend && celery -A app.worker worker --loglevel=info"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: ai-executive-redis
+          property: connectionString
+      - key: DATABASE_URL
+        value: sqlite:///data/seo_executive.db
+      
+  - type: web
+    name: ai-executive-frontend
+    env: static
+    region: oregon
+    buildCommand: "" # No build required for vanilla JS
+    staticPublishPath: "./seo_executive/frontend"

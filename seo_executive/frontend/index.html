@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEO Executive - AI SEO Platform</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <h1>SEO Executive</h1>
+                <span class="badge">AI Powered</span>
+            </div>
+            <div class="header-actions">
+                <button id="authBtn" class="btn btn-secondary">Connect Google</button>
+                <div id="authStatus" class="status-badge">Not Connected</div>
+            </div>
+        </header>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <nav class="nav">
+                <button class="nav-item active" data-page="dashboard">
+                    <span class="icon">📊</span> Dashboard
+                </button>
+                <button class="nav-item" data-page="websites">
+                    <span class="icon">🌐</span> Websites
+                </button>
+                <button class="nav-item" data-page="audits">
+                    <span class="icon">🔍</span> Audits
+                </button>
+                <button class="nav-item" data-page="keywords">
+                    <span class="icon">🎯</span> Keywords
+                </button>
+                <button class="nav-item" data-page="rankings">
+                    <span class="icon">📈</span> Rankings
+                </button>
+                <button class="nav-item" data-page="indexing">
+                    <span class="icon">🚀</span> Indexing
+                </button>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Dashboard Page -->
+            <section id="dashboard" class="page active">
+                <h2>Dashboard</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Websites</h3>
+                        <div class="stat-value" id="websiteCount">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Keywords Tracked</h3>
+                        <div class="stat-value" id="keywordCount">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Audits Run</h3>
+                        <div class="stat-value" id="auditCount">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Active Jobs</h3>
+                        <div class="stat-value" id="activeJobs">-</div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>Quick Actions</h3>
+                    <div class="quick-actions">
+                        <button class="btn btn-primary" onclick="app.navigate('audits')">New Audit</button>
+                        <button class="btn btn-primary" onclick="app.navigate('keywords')">Keyword Research</button>
+                        <button class="btn btn-primary" onclick="app.navigate('rankings')">Check Rankings</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Websites Page -->
+            <section id="websites" class="page">
+                <div class="page-header">
+                    <h2>Websites</h2>
+                    <button class="btn btn-primary" onclick="app.showModal('addWebsite')">Add Website</button>
+                </div>
+                <div class="card">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>URL</th>
+                                <th>GSC Property</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="websitesTable"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Audits Page -->
+            <section id="audits" class="page">
+                <div class="page-header">
+                    <h2>SEO Audits</h2>
+                </div>
+                <div class="card">
+                    <h3>Run New Audit</h3>
+                    <form id="auditForm" class="form">
+                        <div class="form-group">
+                            <label>Website URL</label>
+                            <input type="url" id="auditUrl" placeholder="https://example.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Max Pages</label>
+                            <input type="number" id="auditMaxPages" value="50" min="10" max="500">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Start Audit</button>
+                    </form>
+                </div>
+                <div class="card">
+                    <h3>Recent Audits</h3>
+                    <div id="auditResults" class="results-container"></div>
+                </div>
+            </section>
+
+            <!-- Keywords Page -->
+            <section id="keywords" class="page">
+                <div class="page-header">
+                    <h2>Keyword Research</h2>
+                </div>
+                <div class="card">
+                    <h3>New Research</h3>
+                    <form id="keywordForm" class="form">
+                        <div class="form-group">
+                            <label>Seed Keyword</label>
+                            <input type="text" id="seedKeyword" placeholder="Enter seed keyword" required>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Location</label>
+                                <select id="keywordLocation">
+                                    <option value="us">United States</option>
+                                    <option value="uk">United Kingdom</option>
+                                    <option value="ca">Canada</option>
+                                    <option value="au">Australia</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Depth</label>
+                                <select id="keywordDepth">
+                                    <option value="1">Shallow</option>
+                                    <option value="2" selected>Standard</option>
+                                    <option value="3">Deep</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Start Research</button>
+                    </form>
+                </div>
+                <div class="card">
+                    <h3>Results</h3>
+                    <div id="keywordResults" class="results-container"></div>
+                </div>
+            </section>
+
+            <!-- Rankings Page -->
+            <section id="rankings" class="page">
+                <div class="page-header">
+                    <h2>Rank Tracker</h2>
+                </div>
+                <div class="card">
+                    <h3>Check Rankings</h3>
+                    <form id="rankingForm" class="form">
+                        <div class="form-group">
+                            <label>Domain</label>
+                            <input type="text" id="rankingDomain" placeholder="example.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Keywords (one per line)</label>
+                            <textarea id="rankingKeywords" rows="5" placeholder="keyword 1&#10;keyword 2&#10;keyword 3" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Location</label>
+                            <select id="rankingLocation">
+                                <option value="2840">United States</option>
+                                <option value="2826">United Kingdom</option>
+                                <option value="2124">Canada</option>
+                                <option value="2036">Australia</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Check Rankings</button>
+                    </form>
+                </div>
+                <div class="card">
+                    <h3>Results</h3>
+                    <div id="rankingResults" class="results-container"></div>
+                </div>
+            </section>
+
+            <!-- Indexing Page -->
+            <section id="indexing" class="page">
+                <div class="page-header">
+                    <h2>URL Indexing</h2>
+                </div>
+                <div class="card">
+                    <h3>Submit URLs for Indexing</h3>
+                    <form id="indexingForm" class="form">
+                        <div class="form-group">
+                            <label>URLs (one per line, max 200/day)</label>
+                            <textarea id="indexingUrls" rows="8" placeholder="https://example.com/page-1&#10;https://example.com/page-2" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit URLs</button>
+                    </form>
+                    <div id="indexingQuota" class="quota-info"></div>
+                </div>
+                <div class="card">
+                    <h3>Check Indexing Status</h3>
+                    <form id="indexingStatusForm" class="form">
+                        <div class="form-group">
+                            <label>URL</label>
+                            <input type="url" id="checkUrl" placeholder="https://example.com/page">
+                        </div>
+                        <button type="submit" class="btn btn-secondary">Check Status</button>
+                    </form>
+                    <div id="indexingStatusResult"></div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Modal -->
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="app.hideModal()">&times;</span>
+                <div id="modalBody"></div>
+            </div>
+        </div>
+
+        <!-- Job Status Panel -->
+        <div id="jobPanel" class="job-panel">
+            <h4>Active Jobs</h4>
+            <div id="jobList"></div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
