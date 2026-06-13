@@ -7,6 +7,8 @@
 
 Autonomous AI SEO agent using Ollama and Python for local LLM-driven SEO automation.
 
+![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white) ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=flat-square)
+
 ## ðŸŒŸ Features
 * Comprehensive implementation tailored for modern standards.
 * Secure and optimized for performance.
